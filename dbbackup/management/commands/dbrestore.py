@@ -86,4 +86,8 @@ class Command(BaseDbBackupCommand):
             self._ask_confirmation()
 
         input_file.seek(0)
-        self.connector.restore_dump(input_file)
+        out, err = self.connector.restore_dump(input_file)
+        if out.strip():
+            self.logger.info("-- Restore output: {}".format(out))
+        if err.strip():
+            self.logger.warn("== Error in db restore: {}".format(err))
